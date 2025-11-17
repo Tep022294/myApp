@@ -14,4 +14,11 @@ class UserController extends Controller
             'users' => User::with('roles')->get(),
         ]);
     }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect()->route('users.index');
+    }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import {
     Table,
     TableBody,
@@ -9,13 +10,23 @@ import {
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type User } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
 
 interface Props {
     users: User[];
 }
 
 defineProps<Props>();
+
+const deleteUser = (id: number) => {
+    if (confirm('Are you sure you want to delete this user?')) {
+        router.delete(route('users.destroy', { id }), {
+            onSuccess: () => toast.success('User deleted successfully'),
+            onError: () => toast.error('Failed to delete user'),
+        });
+    }
+};
 </script>
 
 <template>
@@ -43,9 +54,14 @@ defineProps<Props>();
                             {{ role.name }}
                         </span>
                     </TableCell>
-                    <TableCell class="text-right"
-                        >Button to edit/delete</TableCell
-                    >
+                    <TableCell class="text-right">
+                        <Button
+                            variant="destructive"
+                            @click="deleteUser(user.id)"
+                            class="mr-2"
+                            >Delete</Button
+                        >
+                    </TableCell>
                 </TableRow>
             </TableBody>
         </Table>
