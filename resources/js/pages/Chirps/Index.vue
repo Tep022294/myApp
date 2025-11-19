@@ -1,8 +1,16 @@
-<script setup>
+<script setup lang="ts">
+import Cherp from '@/components/Cherp.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { type Chirp } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
+
+interface Props {
+    chirps: Chirp[];
+}
+
+defineProps<Props>();
 
 const form = useForm({
     message: '',
@@ -30,6 +38,9 @@ const submitForm = () => {
                 <InputError :message="form.errors.message" class="mt-2" />
                 <Button variant="default">Chirp</Button>
             </form>
+            <div class="mt-6 divide-y rounded-lg bg-white shadow-sm">
+                <Cherp v-for="chirp in chirps" :key="chirp.id" :chirp="chirp" />
+            </div>
         </div>
     </AppLayout>
 </template>
