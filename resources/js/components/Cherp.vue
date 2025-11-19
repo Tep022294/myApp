@@ -33,6 +33,7 @@ const editing = ref(false);
 const submitForm = () => {
     form.put(route('chirps.update', chirp.id), {
         preserveScroll: true,
+        preserveState: false,
         onSuccess: () => (editing.value = false),
     });
 };
