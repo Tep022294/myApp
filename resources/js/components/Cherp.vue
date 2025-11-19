@@ -1,7 +1,18 @@
 <script setup lang="ts">
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import type { Chirp } from '@/types';
+import { useForm } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { MoreHorizontalIcon } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 dayjs.extend(relativeTime);
 
@@ -9,7 +20,22 @@ interface Props {
     chirp: Chirp;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const chirp = props.chirp;
+
+const form = useForm({
+    message: props.chirp.message,
+});
+
+const editing = ref(false);
+
+const submitForm = () => {
+    form.put(route('chirps.update', chirp.id), {
+        preserveScroll: true,
+        onSuccess: () => (editing.value = false),
+    });
+};
 </script>
 
 <template>
@@ -35,9 +61,45 @@ defineProps<Props>();
                     <small class="ml-2 text-sm text-gray-600">{{
                         dayjs(chirp.created_at).fromNow()
                     }}</small>
+                    <small
+                        v-if="chirp.created_at !== chirp.updated_at"
+                        class="text-sm text-gray-600"
+                    >
+                        &middot; edited</small
+                    >
                 </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger
+                        ><MoreHorizontalIcon
+                    /></DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem @click="editing = true"
+                            >Edit</DropdownMenuItem
+                        >
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
-            <p class="mt-4 text-lg text-gray-900">{{ chirp.message }}</p>
+            <form v-if="editing" @submit.prevent="submitForm()">
+                <textarea
+                    v-model="form.message"
+                    class="focus:ring-opacity-50 mt-4 w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+                ></textarea>
+                <InputError :message="form.errors.message" class="mt-2" />
+                <div class="space-x-2">
+                    <Button class="mt-4">Save</Button>
+                    <button
+                        class="mt-4"
+                        @click="
+                            editing = false;
+                            form.reset();
+                            form.clearErrors();
+                        "
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+            <p v-else class="mt-4 text-lg text-gray-900">{{ chirp.message }}</p>
         </div>
     </div>
 </template>
