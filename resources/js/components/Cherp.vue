@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { Chirp } from '@/types';
-import { useForm } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { MoreHorizontalIcon } from 'lucide-vue-next';
@@ -35,6 +35,12 @@ const submitForm = () => {
         preserveScroll: true,
         onSuccess: () => (editing.value = false),
     });
+};
+
+const deleteChirp = (id: number) => {
+    if (confirm('Are you sure you want to delete this task?')) {
+        router.delete(route('chirps.destroy', { id }));
+    }
 };
 </script>
 
@@ -76,6 +82,9 @@ const submitForm = () => {
                         <DropdownMenuItem @click="editing = true"
                             >Edit</DropdownMenuItem
                         >
+                        <DropdownMenuItem @click="deleteChirp(chirp.id)">
+                            Delete
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -86,7 +95,7 @@ const submitForm = () => {
                 ></textarea>
                 <InputError :message="form.errors.message" class="mt-2" />
                 <div class="space-x-2">
-                    <Button class="mt-4">Save</Button>
+                    <Button :disabled="form.processing">Save</Button>
                     <button
                         class="mt-4"
                         @click="
