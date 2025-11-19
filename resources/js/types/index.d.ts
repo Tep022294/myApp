@@ -29,9 +29,17 @@ export type AppPageProps<
 export interface User {
     id: number;
     name: string;
+    roles: Role[]; 
     email: string;
     avatar?: string;
     email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Role {
+    id: number;
+    name: string;
     created_at: string;
     updated_at: string;
 }
