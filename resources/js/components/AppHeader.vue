@@ -35,12 +35,12 @@ import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
 import {
+    Bird,
     BookOpen,
     Folder,
     LayoutGrid,
     Menu,
     Search,
-    UserIcon,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
@@ -74,9 +74,9 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Users',
-        href: '/users',
-        icon: UserIcon,
+        title: 'Chirps',
+        href: '/chirps',
+        icon: Bird,
     },
 ];
 

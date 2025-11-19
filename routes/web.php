@@ -1,6 +1,5 @@
 <?php
-
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChirpController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -15,8 +14,8 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('users', UserController::class);
-});
+Route::resource('chirps', ChirpController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
 
 require __DIR__.'/settings.php';
