@@ -41,6 +41,7 @@ import {
     LayoutGrid,
     Menu,
     Search,
+    User,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
@@ -77,6 +78,11 @@ const mainNavItems: NavItem[] = [
         title: 'Chirps',
         href: '/chirps',
         icon: Bird,
+    },
+    {
+        title: 'Users',
+        href: '/users',
+        icon: User,
     },
 ];
 
